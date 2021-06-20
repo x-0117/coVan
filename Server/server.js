@@ -15,7 +15,8 @@ const UserSchema = new mongoose.Schema({
   password : {type: String, required : true},
   vaccinated : {type: String, required : true},
   hospitalName : {type: String, required : true},
-  hospitalId : {type: String, required : true}
+  hospitalId : {type: String, required : true},
+  location : {type: String, required: true}
 })
 const User = mongoose.model('UserSchema', UserSchema)
 
@@ -77,7 +78,8 @@ app.post('/registration', (req, res) => {
                 password : hashedPass,
                 vaccinated : "No",
                 hospitalName : "Something",
-                hospitalId : "0"
+                hospitalId : "0",
+                location : "-1 -1"
             })
             user.save()
             res.send("Registered!")
@@ -91,9 +93,6 @@ app.post('/mainPage', (req, res) => {
     long = req.body.long
     date = req.body.date
     username = req.body.username
-    /*lat = 22.546014
-    long = 88.307579
-    date = '19-06-2021'*/
     findCenter = "https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat=" + lat + "&long=" + long
     hospitalName = "Something"
     hospitalId = 0
@@ -116,6 +115,7 @@ app.post('/mainPage', (req, res) => {
                             if (doc.vaccinated == "No"){
                                 doc.hospitalName = hospitalName
                                 doc.hospitalId = hospitalId
+                                doc.location = lat + ' ' + long
                                 await doc.save()
                                 res.send("Assigned!")
                             }
@@ -132,10 +132,6 @@ app.post('/mainPage', (req, res) => {
                         console.log("Error")
                     }
                 })
-                /*if (hospitalId != 0){
-                    // console.log(hospitalId, hospitalName)
-                    break;
-                }*/
             }
         })
         .catch((error) => {console.log(error)})
@@ -147,8 +143,6 @@ app.post('/mainPage', (req, res) => {
     // availability = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByCenter?center_id=' + centerId + '&date=' + date
 
 
-
-
 app.post('/redirects', (req, res) => {
     shit = req.body.variable
     console.log(shit)
@@ -157,6 +151,50 @@ app.post('/redirects', (req, res) => {
     }
     else if (shit == "register"){
         res.redirect('/registration')
+    }
+})
+
+
+app.post('/adM1n', (req, res) => {
+    username = req.body.username
+    password = req.body.password
+    mongoose.connect('mongodb+srv://' + username + ':' + password + '@cluster0.0u6lv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useUnifiedTopology: true, useNewUrlParser: true} ).then((response) => {
+        res.send("Connected!!!!")
+    }).catch((error) => {
+        res.send("Nope!")
+    })
+})
+
+
+app.post('/f1ndU53r', async (req, res) => {
+    username = req.body.username
+    name = req.body.name
+    if (username != "Not known"){
+        let doc = await User.findOne({$or: [{email:username}, {phoneNumber:username}]})
+        if (doc){
+            res.send(doc.firstName + ' ' + doc.lastName + ' ' + doc.phoneNumber + ' ' + doc.location)
+        }
+        else{
+            res.send("Not found!")
+        }
+    }
+    else{
+        User.find({$or:[{firstName : name},{lastName : name}]}, function(err, user) {
+            if (err){
+                res.send("Error!")
+            }
+            if (user.length == 0){
+                res.send("Not found!")
+            }
+            else{
+                shit = ''
+                for (i = 0; i < user.length; i++){
+                    shit += user[i].firstName + ' ' + user[i].lastName + ' ' + user[i].phoneNumber + ' ' + user[i].location + '\n'
+                }
+                res.send(shit)
+            }
+            // res.json(user);
+         })
     }
 })
 
