@@ -19,6 +19,7 @@ const Login = (props) => {
         password : '',
         rePassword : '',
         showPassword: false,
+        errormessage : ''
     });
     const handleChange = (prop) => (event) => {
         event.preventDefault();
@@ -55,7 +56,6 @@ const Login = (props) => {
         return true;
     }
     const check = () => {
-        console.log(checkEmail())
         if(checkName() === false || checkPhone() === false || validatePassword() === false || checkEmail() === false || checkPasswordMatch() === false)
             return true;
         return false;
@@ -66,6 +66,7 @@ const Login = (props) => {
             values : values
         })
         .then(res => {
+            console.log(res.data)
             if(res.data.message === 'Success'){
                 props.history.push({
                     pathname: '/profile',
@@ -80,7 +81,7 @@ const Login = (props) => {
                     }
                   })
             } else {
-                console.log("Failure");
+                setValues({...values , errormessage : res.data.message});
             }
         })
         .catch(err => {
@@ -120,6 +121,7 @@ const Login = (props) => {
                 </Button>
                 </Grid>
             </Grid>
+            <Typography variant='h6' color='primary' gutterBottom align="center">{values.errormessage}</Typography>
         </Paper>
     </Grow>
     )

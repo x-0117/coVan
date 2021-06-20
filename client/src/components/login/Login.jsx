@@ -26,15 +26,15 @@ const Login = (props) => {
                     pathname: '/profile',
                     state: { 
                         values : {
-                            name : dataValue.firstName + ' ' + dataValue.lastName,
-                            email : dataValue.email,
-                            phone : dataValue.phone,
-                            dateChoosen : '22-09-2019',
+                            name : dataValue.values.name,
+                            email : dataValue.values.email,
+                            phone : dataValue.values.phone,
+                            dateChoosen : dataValue.values.dateChoosen,
                         }
                     }
                   })
             } else {
-                setValues({...values , errorMessage : res.data.message});
+                setValues({...values , errorMessage : dataValue.message});
             }
         })
         .catch(err => {

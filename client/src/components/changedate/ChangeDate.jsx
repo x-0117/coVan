@@ -9,7 +9,8 @@ const ChangeDate = (props) => {
     const [datavalues, setdataValues] = useState({
         lat : '',
         long : '',
-        date : ''
+        date : '',
+        errorMessage : ''
     });
     const handleChange = (prop) => (event) => {
         event.preventDefault();
@@ -35,11 +36,12 @@ const ChangeDate = (props) => {
     }
     const postData = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/dates' , {
-            values : datavalues
+        axios.post('http://localhost:4000/mainPage' , {
+            values : datavalues,
+            username : props.location.state.values.email
         })
         .then(res => {
-            if(res.data.message === 'Success'){
+            if(res.data.message === 'Assigned!'){
                 props.history.push({
                     pathname : '/track-vaccine',
                     state : {
@@ -47,6 +49,8 @@ const ChangeDate = (props) => {
                         date : datavalues.date
                     }
                 })
+            } else {
+                setdataValues({ ...datavalues , errorMessage : res.data.message})
             }
         })
         .catch(err => {
@@ -91,6 +95,7 @@ const ChangeDate = (props) => {
                     </Grid>
                 </Grid>
                 {errorPos() ? <Typography align="center">Please Allow Location Access So That We Can Serve You Better</Typography> : ""}
+                <Typography variant='h6' color='primary' gutterBottom align="center">{datavalues.errormessage}</Typography>
                 </Paper>
             </Grow>
         </>

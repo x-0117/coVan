@@ -41,7 +41,7 @@ app.post('/login', (req, res) => {
                     "values" : {
                         "name" : user.firstName + ' ' + user.lastName,
                         "email" : user.email,
-                        "phone" : user.phone,
+                        "phone" : user.phoneNumber,
                         "dateChoosen" : user.date,
                     }
                 })
@@ -61,6 +61,7 @@ app.post('/login', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
+    console.log(req.body)
     User.findOne({$or: [{email:req.body.values.email}, {phoneNumber:req.body.values.phoneNumber}]})
     .then(async user => {
         if(user){
@@ -92,10 +93,12 @@ app.post('/register', (req, res) => {
 
 
 app.post('/mainPage', (req, res) => {
-    lat = req.body.lat
-    long = req.body.long
-    date = req.body.date
+    console.log(req.body)
+    lat = req.body.values.lat
+    long = req.body.values.long
+    date = req.body.values.date
     username = req.body.username
+    console.log(lat,long,date,username)
     findCenter = "https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat=" + lat + "&long=" + long
     hospitalName = "Something"
     hospitalId = 0
@@ -109,7 +112,7 @@ app.post('/mainPage', (req, res) => {
                 axios.get(findVac).then(async (resp) => {
                     try{
                         shit = resp.data.centers
-                        // console.log(shit.sessions[0].available_capacity)
+                        // console.log(shit)
                         if (shit.sessions[0].available_capacity > 0){
                             hospitalName = shit.name
                             hospitalId = shit.center_id
@@ -120,19 +123,21 @@ app.post('/mainPage', (req, res) => {
                                 doc.hospitalId = hospitalId
                                 doc.location = lat + ' ' + long
                                 await doc.save()
-                                res.send("Assigned!")
-                            }
-                            else{
-                                res.send("Vaccinated!")
+                                res.json({
+                                    "message" : "Assigned!"
+                                })
                             }
                             return
                         }
                         else{
-                            console.log("No vaccines")
+                            console.log("n")
+                            res.json({
+                                "message" : "No Vaccines Available"
+                            })
                         }
                     }
-                    catch(e){
-                        console.log("Error")
+                    catch(err){
+                        // console.log(err)
                     }
                 })
             }

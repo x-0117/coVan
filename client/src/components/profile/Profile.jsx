@@ -9,8 +9,9 @@ const Profile = (props) => {
     if(typeof props.location.state === 'undefined'){
         return <Redirect to='/login'/>
     }
-    const isDateChoosen = props.location.state.values.isdateChoosen;
-    const dateChoosen = isDateChoosen ? props.location.state.values.dateChoosen : null;
+    console.log(props.location.state)
+    const isDateChoosen = props.location.state.values.dateChoosen === '0-0-0' ? false : true;
+    const dateChoosen = props.location.state.values.dateChoosen;
     const name = props.location.state.values.name;
     const changeDate = () => {
         props.history.push({
