@@ -92,13 +92,13 @@ app.post('/register', (req, res) => {
 })
 
 
-app.post('/mainPage', (req, res) => {
-    console.log(req.body)
-    lat = req.body.values.lat
-    long = req.body.values.long
-    date = req.body.values.date
+app.post('/mainPage', async (req, res) => {
+    lat = req.body.lat
+    long = req.body.long
+    date = req.body.date
     username = req.body.username
-    console.log(lat,long,date,username)
+    let doc1 = await User.findOne({email : username})
+    oldDate = doc1.date
     findCenter = "https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat=" + lat + "&long=" + long
     hospitalName = "Something"
     hospitalId = 0
@@ -112,7 +112,7 @@ app.post('/mainPage', (req, res) => {
                 axios.get(findVac).then(async (resp) => {
                     try{
                         shit = resp.data.centers
-                        // console.log(shit)
+                        // console.log(shit.sessions[0].available_capacity)
                         if (shit.sessions[0].available_capacity > 0){
                             hospitalName = shit.name
                             hospitalId = shit.center_id
@@ -122,33 +122,42 @@ app.post('/mainPage', (req, res) => {
                                 doc.hospitalName = hospitalName
                                 doc.hospitalId = hospitalId
                                 doc.location = lat + ' ' + long
+                                // console.log(date, doc.date)
+                                doc.date = date
                                 await doc.save()
-                                res.json({
-                                    "message" : "Assigned!"
-                                })
+                                // console.log("Assigned!")
+                            }
+                            else{
+                                // console.log("Vaccinated!")
                             }
                             return
                         }
                         else{
-                            console.log("n")
-                            res.json({
-                                "message" : "No Vaccines Available"
-                            })
+                            // console.log("No vaccines")
                         }
                     }
-                    catch(err){
-                        // console.log(err)
+                    catch(e){
+                        // console.log("Error")
                     }
                 })
             }
         })
         .catch((error) => {console.log(error)})
+        // let doc2 = await User.findOne({email : username})
+        if (oldDate == date){
+            res.json({
+                "message" : "Not Assigned"
+            })
+        }
+        else{
+            res.json({
+                "message" : "Assigned"
+            })
+        }
     })
     .on("error", (err) => {
         console.log(err)
 })
-    // console.log(response)
-    // availability = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByCenter?center_id=' + centerId + '&date=' + date
 
 
 app.post('/redirects', (req, res) => {
