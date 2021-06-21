@@ -179,43 +179,52 @@ app.post('/adM1n', (req, res) => {
     username = req.body.username
     password = req.body.password
     mongoose.connect('mongodb+srv://' + username + ':' + password + '@cluster0.0u6lv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useUnifiedTopology: true, useNewUrlParser: true} ).then((response) => {
-        res.send("Connected!!!!")
+        res.json({
+            "message" : "success"
+        })
     }).catch((error) => {
-        res.send("Nope!")
+        res.json({
+            "message" : "failure"
+        })
     })
 })
 
 
 app.post('/f1ndU53r', async (req, res) => {
     username = req.body.username
-    name = req.body.name
-    if (username != "Not known"){
-        let doc = await User.findOne({$or: [{email:username}, {phoneNumber:username}]})
-        if (doc){
-            res.send(doc.firstName + ' ' + doc.lastName + ' ' + doc.phoneNumber + ' ' + doc.location)
-        }
-        else{
-            res.send("Not found!")
-        }
+    hospitalId = req.body.hospitalId
+    let doc = await User.findOne({$and: [{$or: [{email:username}, {phoneNumber:username}]}, {hospitalId:hospitalId}]})
+    if (doc){
+        res.json({
+            "message" : "Found",
+            "data" : {
+                "name" : doc.firstName + ' ' + doc.lastName,
+                "phoneNumber" : doc.phoneNumber,
+                "location" : doc.location
+            }
+        })
     }
     else{
-        User.find({$or:[{firstName : name},{lastName : name}]}, function(err, user) {
-            if (err){
-                res.send("Error!")
-            }
-            if (user.length == 0){
-                res.send("Not found!")
-            }
-            else{
-                shit = ''
-                for (i = 0; i < user.length; i++){
-                    shit += user[i].firstName + ' ' + user[i].lastName + ' ' + user[i].phoneNumber + ' ' + user[i].location + '\n'
-                }
-                res.send(shit)
-            }
-            // res.json(user);
-         })
+        res.json({
+            "message" : "Not found"
+        })
     }
+})
+
+
+app.post('/otp', async (req, res) => {
+    let doc = await User.findOne({email : req.body.email})
+    doc.otp = req.body.otp
+    doc.vaccinated = "Yes"
+    await doc.save()
+})
+
+
+app.post('/getOtp', async (req, res) => {
+    let doc = await User.findOne({email : req.body.email})
+    res.json({
+        "otp" : doc.otp
+    })
 })
 
 
