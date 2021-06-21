@@ -216,18 +216,52 @@ app.post('/f1ndU53r', async (req, res) => {
 
 app.post('/otp', async (req, res) => {
     let doc = await User.findOne({email : req.body.email})
-    doc.otp = req.body.otp
-    doc.vaccinated = "Yes"
-    await doc.save()
+    if(doc){
+        doc.otp = req.body.otp
+        await doc.save()
+        res.json({
+            "message" : "set"
+        })
+    }
+    else{
+        res.json({
+            "message" : "Not found"
+        })
+    }
 })
 
 
 app.post('/getOtp', async (req, res) => {
     let doc = await User.findOne({email : req.body.email})
-    res.json({
-        "otp" : doc.otp
-    })
+    if(doc){
+        res.json({
+            "otp" : doc.otp
+        })
+    }
+    else{
+        res.json({
+            "otp" : "Not found"
+        })
+    }
 })
+
+
+app.post('/vaccinated', async (req, res) => {
+    let doc = await User.findOne({email : req.body.email})
+    if(doc){
+        doc.vaccinated = "Yes"
+        await doc.save()
+        res.json({
+            "message" : "set"
+        })
+    }
+    else{
+        res.json({
+            "message" : "Not found"
+        })
+    }
+})
+
 
 
 mongoose.connect('mongodb+srv://x_117:JAbPuF8g5zCD1pwX@cluster0.0u6lv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useUnifiedTopology: true, useNewUrlParser: true} ).then((response) => {
