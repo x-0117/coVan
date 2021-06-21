@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema({
   hospitalId : {type: String, required : true},
   location : {type: String, required: true},
   date : {type: String, required: true},
+  otp : {type: String, required: true}
 })
 const User = mongoose.model('UserSchema', UserSchema)
 
@@ -81,7 +82,8 @@ app.post('/register', (req, res) => {
                 hospitalName : "Something",
                 hospitalId : "0",
                 location : "-1 -1",
-                date : "0-0-0"
+                date : "0-0-0",
+                otp : "______"
             })
             user.save()
             res.json({
