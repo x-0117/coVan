@@ -76,7 +76,7 @@ const Login = (props) => {
                             email : values.email,
                             phone : values.phoneNumber,
                             isdateChoosen : false,
-                            dateChoosen : null,
+                            dateChoosen : '0-0-0',
                         }
                     }
                   })
@@ -109,7 +109,7 @@ const Login = (props) => {
                 <Inputs size={6} name="email" label="Email" type="email" values={values.email} onChange={handleChange} passwordIcon={false} handleClick={handleClickShowPassword} showPasswords={values.showPassword} icon={<EmailIcon/>} labelWidths={40} boolValue={boolEmail} color={false} helperText="Enter Valid Email Address"/>
                 <Inputs size={6} name="phoneNumber" label="Phone Number" type="tel" values={values.phoneNumber} onChange={handleChange} passwordIcon={false} handleClick={handleClickShowPassword} showPasswords={values.showPassword} icon={<PhoneAndroidIcon/>} labelWidths={110} boolValue={boolPhone} color={false} helperText="Enter Valid Phone Number"/>
                 <Inputs size={6} name="password" label="Password" type={values.showPassword ? 'text' : 'password'} values={values.password} onChange={handleChange} passwordIcon={true} handleClick={handleClickShowPassword} showPasswords={values.showPassword} labelWidths={80} boolValue={boolPasswordStrength} color={true} helperText="Password must be minimum 8 charcters long with atleast one UpperCase, LowerCase , Number and Symbol"/>
-                <Inputs size={6} name="rePassword" label="Re-enter Password" type="password" values={values.rePassword} onChange={handleChange} passwordIcon={false} handleClick={handleClickShowPassword} showPasswords={values.showPassword} icon={<Lock/>} labelWidths={110} boolValue={boolPassword} color={true} helperText="Passwords Does Not Match"/>
+                <Inputs size={6} name="rePassword" label="Re-enter Password" type="password" values={values.rePassword} onChange={handleChange} passwordIcon={false} handleClick={handleClickShowPassword} showPasswords={values.showPassword} icon={<Lock/>} labelWidths={140} boolValue={boolPassword} color={true} helperText="Passwords Does Not Match"/>
                 <Grid container item lg={6} style={{marginTop : '20px' , fontSize : '20px'}}>
                 <Button variant="contained" color="primary" startIcon={<LockOpenIcon />} fullWidth style={{fontSize : '17px' , fontWeight : '700'}} onClick={redirectLog}>
                     Go To Login Page

@@ -6,6 +6,8 @@ import Intro from './components/intro/Intro';
 import Profile from './components/profile/Profile';
 import TrackVaccine from './components/vaccine/TrackVaccine';
 import ChangeDate from './components/changedate/ChangeDate';
+import Admin from './components/admin/AdminLogin';
+import AdminPortal from './components/admin/AdminPortal';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/profile" exact component={Profile} />
         <Route path="/change-date" exact component={ChangeDate} />
         <Route path="/track-vaccine" exact component={TrackVaccine} />
+        <Route path="/admin-portal" exact component={AdminPortal} />
+        <Route path="/admin" exact component={Admin} />
         <Route path="/" exact component={Intro} />
       </Switch>
     </BrowserRouter>

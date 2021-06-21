@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom';
 import Navbars from '../UI/Navbar';
-import {Grow , Paper , Typography , Grid , Button ,} from '@material-ui/core';
+import {Grow , Paper , Typography , Grid , Button} from '@material-ui/core';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
@@ -9,7 +9,6 @@ const Profile = (props) => {
     if(typeof props.location.state === 'undefined'){
         return <Redirect to='/login'/>
     }
-    console.log(props.location.state)
     const isDateChoosen = props.location.state.values.dateChoosen === '0-0-0' ? false : true;
     const dateChoosen = props.location.state.values.dateChoosen;
     const name = props.location.state.values.name;

@@ -24,8 +24,10 @@ const ChangeDate = (props) => {
         navigator.geolocation.getCurrentPosition(
             position => setdataValues({
                 ...datavalues,
-                lat : position.coords.latitude,
-                long : position.coords.longitude,
+                // lat : position.coords.latitude,
+                // long : position.coords.longitude,
+                lat : 19.11,
+                long : 72.87
             })
         )
     }
@@ -41,6 +43,7 @@ const ChangeDate = (props) => {
             username : props.location.state.values.email
         })
         .then(res => {
+            console.log(res.data)
             if(res.data.message === 'Assigned!'){
                 props.history.push({
                     pathname : '/track-vaccine',
