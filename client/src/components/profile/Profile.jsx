@@ -6,12 +6,21 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 const Profile = (props) => {
-    if(typeof props.location.state === 'undefined'){
-        return <Redirect to='/login'/>
-    }
     const isDateChoosen = props.location.state.values.dateChoosen === '0-0-0' ? false : true;
     const dateChoosen = props.location.state.values.dateChoosen;
     const name = props.location.state.values.name;
+    if(typeof props.location.state === 'undefined'){
+        return <Redirect to='/login'/>
+    }
+    if(props.location.state.values.vaccinated !== 'No'){
+        return <Redirect to={{
+            pathname : '/track-vaccine',
+            state : {
+                values : props.location.state.values,
+                date : dateChoosen
+            }
+        }}/>
+    }
     const changeDate = () => {
         props.history.push({
             pathname : '/change-date',
@@ -24,7 +33,8 @@ const Profile = (props) => {
         props.history.push({
             pathname : '/track-vaccine',
             state : {
-                values : props.location.state.values
+                values : props.location.state.values,
+                date : dateChoosen
             }
         })
     }

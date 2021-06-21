@@ -63,7 +63,7 @@ const Login = (props) => {
     const postData = (e) => {
         e.preventDefault();
         axios.post('http://localhost:4000/register' , {
-            values : values
+            values : values,
         })
         .then(res => {
             console.log(res.data)
@@ -77,6 +77,7 @@ const Login = (props) => {
                             phone : values.phoneNumber,
                             isdateChoosen : false,
                             dateChoosen : '0-0-0',
+                            vaccinated : "No"
                         }
                     }
                   })

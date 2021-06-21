@@ -30,6 +30,7 @@ const Login = (props) => {
                             email : dataValue.values.email,
                             phone : dataValue.values.phone,
                             dateChoosen : dataValue.values.dateChoosen,
+                            vaccinated : dataValue.values.vaccinated
                         }
                     }
                   })

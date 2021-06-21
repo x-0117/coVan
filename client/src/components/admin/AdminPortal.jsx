@@ -27,7 +27,8 @@ const Profile = (props) => {
             name : ''
         })
         axios.post("http://localhost:4000/admin-portal",{
-            email : values.email
+            email : values.email,
+            hospitalID : props.location.state.hospitalID
         })
         .then(res => {
             if(res.data.message === 'Success'){
@@ -54,12 +55,12 @@ const Profile = (props) => {
         })
     }
     const postOTP = () => {
-        const Otp = Math.floor((Math.random() * 1000000) + 1);
-        axios.post("http://localhost:4000/otp" , {otp : otp})
+        const Otpmessage = Math.floor(100000 + Math.random() * 900000);
+        axios.post("http://localhost:4000/otp" , {otp : Otpmessage})
             .then(res => {
                 console.log(res)
                 if(res.data.message === 'Success'){
-                    setotp({...otp , otp : Otp});
+                    setotp({...otp , otp : Otpmessage});
                 } else {
                     setotp({
                         ...otp,

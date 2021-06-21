@@ -17,7 +17,8 @@ const Login = (props) => {
     const postData = (e) => {
         e.preventDefault();
         axios.post('http://localhost:4000/admin' , {
-            values : values
+            username : values.userName,
+            password : values.password
         })
         .then(res => {
             const dataValue = res.data;
@@ -26,9 +27,7 @@ const Login = (props) => {
                     pathname: '/admin-portal',
                     state: { 
                         values : {
-                            name : dataValue.values.name,
-                            email : dataValue.values.email,
-                            phone : dataValue.values.phone,
+                            hospitalID : values.hospitalid
                         }
                     }
                   })

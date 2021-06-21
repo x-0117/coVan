@@ -5,7 +5,7 @@ import {Grow , Paper , Grid , Typography , Button} from '@material-ui/core';
 import axios from 'axios';
 
 const TrackVaccine = (props) => {
-    const [Otp , setOtp] = useState(0);
+    const [Otp , setOtp] = useState({Otp : 0});
     const [Clicked , setClicked] = useState(false);
     if(typeof props.location.state === 'undefined'){
         return <Redirect to='/login'/>
@@ -15,27 +15,25 @@ const TrackVaccine = (props) => {
         event.preventDefault();
         axios.get("http://localhost:4000/otp")
             .then(res => {
-                if(res.data.otp !== 0){
-                    console.log(Otp)
-                    setOtp({
-                        ...Otp,
-                        Otp : res.data.otp,
-                    })
-                }
+                setOtp({
+                    ...Otp,
+                    Otp : res.data.otp,
+                })
+                console.log(Otp.Otp,res.data.otp)
                 setClicked({
                     Clicked : true
                 })
             })
     }
     let message = "";
-    if(Clicked && Otp === ''){
+    if(Clicked && Otp.Otp === 0){
         message = "Your OTP will be generaed by Admin On Due Date"
-    } else if (Clicked && Otp !== '') {
-        message = `Your OTP is ${Otp}`
+    } else if (Clicked && Otp.Otp !== 0) {
+        message = `Your OTP is ${Otp.Otp}`
     }
-    return (
-        <>
-            <Navbars names={name}/>
+    let data;
+    if(props.location.state.values.vaccinated === 'No'){
+        data = (
             <Grow in={true} timeout={1000}>
                 <Paper elevation={6} style={{padding : '50px 20px' , margin : '140px 15% 0% 15%'}}>
                 <div style={{fontSize : 120 , textAlign : 'center', color : "lightgreen" , marginBottom : 20}}>
@@ -54,6 +52,24 @@ const TrackVaccine = (props) => {
                 </Typography>
                 </Paper>
             </Grow>
+        )
+    } else {
+        data = (
+            <Grow in={true} timeout={1000}>
+                <Paper elevation={6} style={{padding : '50px 20px' , margin : '140px 15% 0% 15%'}}>
+                <div style={{fontSize : 120 , textAlign : 'center', color : "lightgreen" , marginBottom : 20}}>
+                    <i className="fas fa-check"></i>
+                </div>
+                <Typography variant="h4" color="secondary" align="center" gutterBottom>Your Vaccination is Done !</Typography>
+                <Typography variant="h6" color="primary" align="center">Thank You For Your Co-operation , We Wish You and Your Family Good Luck</Typography>
+                </Paper>
+            </Grow>
+        )
+    }
+    return (
+        <>
+            <Navbars names={name}/>
+            {data}
         </>
     )
 }
