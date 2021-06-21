@@ -96,6 +96,8 @@ app.post('/mainPage', async (req, res) => {
     lat = req.body.lat
     long = req.body.long
     date = req.body.date
+    date = date.split('-')[2] + '-' + date.split('-')[1] + '-' + date.split('-')[0]
+    console.log(date)
     username = req.body.username
     let doc1 = await User.findOne({email : username})
     oldDate = doc1.date
