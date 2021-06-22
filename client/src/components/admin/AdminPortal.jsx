@@ -11,7 +11,9 @@ const Profile = (props) => {
         name : '' , 
         email : '' , 
         phone : '' , 
-        date : '' , 
+        date : '' ,
+        location : '',
+        vaccinated : '' 
     })
     const [otp,setotp] = React.useState({otp : 0 , errorOtp : ''});
     const handleChange = (prop) => (event) => {
@@ -26,9 +28,9 @@ const Profile = (props) => {
             ...values,
             name : ''
         })
-        axios.post("http://localhost:4000/admin-portal",{
-            email : values.email,
-            hospitalID : props.location.state.hospitalID
+        axios.post("http://localhost:4000/f1nduser",{
+            username : values.email,
+            hospitalID : props.location.state.values.hospitalID
         })
         .then(res => {
             if(res.data.message === 'Success'){
@@ -41,7 +43,9 @@ const Profile = (props) => {
                     name : res.data.values.name,
                     email : res.data.values.email,
                     phone : res.data.values.phone,
-                    date : res.data.values.date
+                    date : res.data.values.date,
+                    location : res.data.values.location,
+                    vaccinated : res.data.values.vaccinated,
                 })
             } else {
                 setValues({
@@ -54,11 +58,29 @@ const Profile = (props) => {
             console.log(err);
         })
     }
+    const postVaccine = () => {
+        axios.post("http://localhost:4000/vaccinated" , {
+            email : userDetails.email })
+            .then(res => {
+                if(res.data.message === 'Success'){
+                    setuserDetails({...userDetails , vaccinated : "Yes"});
+                    setotp({
+                        ...otp,
+                        otp : 0
+                    })
+                } 
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
     const postOTP = () => {
         const Otpmessage = Math.floor(100000 + Math.random() * 900000);
-        axios.post("http://localhost:4000/otp" , {otp : Otpmessage})
+        axios.post("http://localhost:4000/otp" , {
+            otp : Otpmessage ,
+            email : userDetails.email
+        })
             .then(res => {
-                console.log(res)
                 if(res.data.message === 'Success'){
                     setotp({...otp , otp : Otpmessage});
                 } else {
@@ -67,7 +89,6 @@ const Profile = (props) => {
                         errorOtp : res.data.message
                     })
                 }
-                console.log(otp.otp)
             })
             .catch(err => {
                 console.log(err);
@@ -75,28 +96,43 @@ const Profile = (props) => {
     }
     const data = userDetails.name !== '' ? (
         <Grow in={true} timeout={1000}>
-            <Paper elevation={6} style={{padding : '20px 20px' , margin : '20px 15% 0% 15%'}}>
+            <Paper elevation={6} style={{padding : '20px 20px' , margin : '20px 15% 10px 15%'}}>
             <Typography variant='h4' color='primary' gutterBottom>User Details</Typography>
-            <Grid container spacing={5} style={{padding : 30}} item={true}>
-                <Grid lg={6} container>
-                    <Typography variant='h6' color='primary' gutterBottom >Name : <span style={{color: "red"}}>{userDetails.name}</span></Typography>
+            <Grid container spacing={5} style={{padding : 5}} item={true}>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Name : <span style={{color: "red"}}>{userDetails.name}</span></Typography>
                 </Grid>
-                <Grid lg={6} container>
-                    <Typography variant='h6' color='primary' gutterBottom >Email : <span style={{color: "red"}}>{userDetails.email}</span></Typography>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Email : <span style={{color: "red"}}>{userDetails.email}</span></Typography>
                 </Grid>
-                <Grid lg={6} container>
-                    <Typography variant='h6' color='primary' gutterBottom >Phone : <span style={{color: "red"}}>{userDetails.phone}</span></Typography>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Phone : <span style={{color: "red"}}>{userDetails.phone}</span></Typography>
                 </Grid>
-                <Grid lg={6} container>
-                    <Typography variant='h6' color='primary' gutterBottom >Date : <span style={{color: "red"}}>{userDetails.date}</span></Typography>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Date : <span style={{color: "red"}}>{userDetails.date}</span></Typography>
                 </Grid>
-                <Grid lg={12} container style={{marginTop : '20px' , fontSize : '20px'}}>
-                    <Button variant="contained" color="primary" fullWidth style={{fontSize : '17px' , fontWeight : '700'}} onClick={postOTP}>
-                        Generate OTP
-                    </Button>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Vaccination Status : <span style={{color: "red"}}>{userDetails.vaccinated}</span></Typography>
                 </Grid>
+                <Grid lg={6} container item={true}>
+                    <Typography variant='h6' color='primary' gutterBottom style={{margin : 0}}>Latitude and Longitude : <span style={{color: "red"}}>{userDetails.location}</span></Typography>
+                </Grid>
+                {userDetails.vaccinated === 'No' ? 
+                (<>
+                    <Grid lg={6} container item={true} style={{marginTop : '20px' , fontSize : '20px'}}>
+                        <Button variant="contained" color="primary" fullWidth style={{fontSize : '17px' , fontWeight : '700'}} onClick={postOTP}>
+                            Generate OTP
+                        </Button>
+                    </Grid>
+                    <Grid lg={6} container item={true} style={{marginTop : '20px' , fontSize : '20px'}}>
+                        <Button variant="contained" color="secondary" fullWidth style={{fontSize : '17px' , fontWeight : '700'}} onClick={postVaccine}>
+                            Vaccinated
+                        </Button>
+                    </Grid>
+                </>)
+                : ""}
             </Grid>
-            <Typography variant='h6' color='secondary' gutterBottom align="center">{otp.otp !== 0 ? `Generated OTP : ${otp.otp}` : otp.errorOtp === '' ? '' : "We Encountered Some Problem While Generating OTP"}</Typography>
+            <Typography variant='h6' color='secondary' gutterBottom align="center" style={{marginTop : 15}}>{otp.otp !== 0 ? `Generated OTP : ${otp.otp}` : otp.errorOtp === '' ? '' : "We Encountered Some Problem While Generating OTP"}</Typography>
             </Paper>
         </Grow>
     ) : "";

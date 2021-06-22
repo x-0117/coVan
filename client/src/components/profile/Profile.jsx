@@ -68,7 +68,7 @@ const Profile = (props) => {
             <Grid container spacing={5} style={{padding : 30}} >
                 <Grid container item lg={12} style={{marginTop : '20px' , fontSize : '20px'}}>
                     <Button variant="contained" color="secondary" startIcon={<DateRangeIcon />} fullWidth style={{fontSize : '17px' , fontWeight : '700'}} onClick={changeDate}>
-                        Change Date
+                        Choose Date
                     </Button>
                 </Grid>
             </Grid>

@@ -66,7 +66,6 @@ const Login = (props) => {
             values : values,
         })
         .then(res => {
-            console.log(res.data)
             if(res.data.message === 'Success'){
                 props.history.push({
                     pathname: '/profile',

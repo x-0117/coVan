@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect} from 'react'
 import { Redirect } from 'react-router'
 import Navbars from '../UI/Navbar';
 import {Grow , Paper , Grid , Typography , Button} from '@material-ui/core';
@@ -7,19 +7,32 @@ import axios from 'axios';
 const TrackVaccine = (props) => {
     const [Otp , setOtp] = useState({Otp : 0});
     const [Clicked , setClicked] = useState(false);
+    const [Vaccinated,setVaccinated] = useState("No");
+    useEffect(() =>{
+        axios.post('http://localhost:4000/status' , {
+            email : props.location.state.values.email
+        })
+        .then(res => {
+            setVaccinated({Vaccinated : res.data.vaccinated})
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } , [props.location.state.values.email])
     if(typeof props.location.state === 'undefined'){
         return <Redirect to='/login'/>
     }
     const name = props.location.state.values.name;
     const getOTP = (event) => {
         event.preventDefault();
-        axios.get("http://localhost:4000/otp")
+        axios.post("http://localhost:4000/getOtp",{
+            email : props.location.state.values.email
+        })
             .then(res => {
                 setOtp({
                     ...Otp,
                     Otp : res.data.otp,
                 })
-                console.log(Otp.Otp,res.data.otp)
                 setClicked({
                     Clicked : true
                 })
@@ -32,7 +45,7 @@ const TrackVaccine = (props) => {
         message = `Your OTP is ${Otp.Otp}`
     }
     let data;
-    if(props.location.state.values.vaccinated === 'No'){
+    if(Vaccinated.Vaccinated === 'No'){
         data = (
             <Grow in={true} timeout={1000}>
                 <Paper elevation={6} style={{padding : '50px 20px' , margin : '140px 15% 0% 15%'}}>
