@@ -20,7 +20,7 @@ const Profile = (props) => {
         setValues({ ...values, [prop]: event.target.value });
     };
     if(typeof props.location.state === 'undefined'){
-        return <Redirect to='/admin'/>
+        return <Redirect to='/adM1n'/>
     }
     const postData = (e) => {
         e.preventDefault();
