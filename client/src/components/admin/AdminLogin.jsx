@@ -24,7 +24,7 @@ const Login = (props) => {
             const dataValue = res.data;
             if(dataValue.message === 'Success'){
                 props.history.push({
-                    pathname: '/admin-portal',
+                    pathname: '/adM1n-portal',
                     state: { 
                         values : {
                             hospitalID : values.hospitalid

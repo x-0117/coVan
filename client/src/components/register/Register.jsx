@@ -62,7 +62,7 @@ const Login = (props) => {
     }
     const postData = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/register' , {
+        axios.post('/register' , {
             values : values,
         })
         .then(res => {

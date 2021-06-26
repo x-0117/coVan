@@ -9,7 +9,7 @@ const TrackVaccine = (props) => {
     const [Clicked , setClicked] = useState(false);
     const [Vaccinated,setVaccinated] = useState("No");
     useEffect(() =>{
-        axios.post('http://localhost:4000/status' , {
+        axios.post('/status' , {
             email : props.location.state.values.email
         })
         .then(res => {
@@ -25,7 +25,7 @@ const TrackVaccine = (props) => {
     const name = props.location.state.values.name;
     const getOTP = (event) => {
         event.preventDefault();
-        axios.post("http://localhost:4000/getOtp",{
+        axios.post("/getOtp",{
             email : props.location.state.values.email
         })
             .then(res => {

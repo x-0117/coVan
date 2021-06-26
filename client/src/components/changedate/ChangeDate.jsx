@@ -36,14 +36,12 @@ const ChangeDate = (props) => {
     }
     const postData = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/mainPage' , {
+        axios.post('/mainPage' , {
             values : datavalues,
             username : props.location.state.values.email
         })
         .then(res => {
-            console.log(res)
             const set_date = datavalues.date.split('-')[2] + '-' + datavalues.date.split('-')[1] + '-' + datavalues.date.split('-')[0]
-            console.log(res.data.date,set_date)
             if(res.data.message === 'Found' && res.data.date === set_date && res.data.date !== '0-0-0'){
                 props.history.push({
                     pathname : '/track-vaccine',

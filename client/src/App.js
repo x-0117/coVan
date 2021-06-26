@@ -18,8 +18,8 @@ function App() {
         <Route path="/profile" exact component={Profile} />
         <Route path="/change-date" exact component={ChangeDate} />
         <Route path="/track-vaccine" exact component={TrackVaccine} />
-        <Route path="/admin-portal" exact component={AdminPortal} />
-        <Route path="/admin" exact component={Admin} />
+        <Route path="/adM1n-portal" exact component={AdminPortal} />
+        <Route path="/adM1n" exact component={Admin} />
         <Route path="/" exact component={Intro} />
       </Switch>
     </BrowserRouter>

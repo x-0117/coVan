@@ -16,7 +16,7 @@ const Login = (props) => {
     };
     const postData = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/login' , {
+        axios.post('/login' , {
             values : values
         })
         .then(res => {

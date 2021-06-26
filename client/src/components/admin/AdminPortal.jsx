@@ -28,7 +28,7 @@ const Profile = (props) => {
             ...values,
             name : ''
         })
-        axios.post("http://localhost:4000/f1nduser",{
+        axios.post("/f1nduser",{
             username : values.email,
             hospitalID : props.location.state.values.hospitalID
         })
@@ -59,7 +59,7 @@ const Profile = (props) => {
         })
     }
     const postVaccine = () => {
-        axios.post("http://localhost:4000/vaccinated" , {
+        axios.post("/vaccinated" , {
             email : userDetails.email })
             .then(res => {
                 if(res.data.message === 'Success'){
@@ -76,7 +76,7 @@ const Profile = (props) => {
     }
     const postOTP = () => {
         const Otpmessage = Math.floor(100000 + Math.random() * 900000);
-        axios.post("http://localhost:4000/otp" , {
+        axios.post("/otp" , {
             otp : Otpmessage ,
             email : userDetails.email
         })
