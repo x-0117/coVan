@@ -68,7 +68,7 @@ exports.register = (req, res) => {
     })
 }
 
-exports.mainPage = async (req, res) => {
+exports.mainPage = async (req, res , next) => {
     lat = req.body.values.lat
     long = req.body.values.long
     date = req.body.values.date
@@ -92,47 +92,50 @@ exports.mainPage = async (req, res) => {
                         console.log(resp.data)
                         shit = resp.data.centers
                         // console.log(shit.sessions[0].available_capacity)
-                        if (shit.sessions[0].available_capacity > 0){
-                            hospitalName = shit.name
-                            hospitalId = shit.center_id
-                            // console.log(hospitalId, hospitalName)
-                            let doc = await User.findOne({email : username})
-                            if (doc.vaccinated == "No"){
-                                doc.hospitalName = hospitalName
-                                doc.hospitalId = hospitalId
-                                doc.location = lat + ' ' + long
-                                // console.log(date, doc.date)
-                                doc.date = date
-                                await doc.save()
-                                // console.log("Assigned!")
+                        for(let j=0;j<shit.sessions.length;j++){
+                            if (shit.sessions[j].available_capacity > 0){
+                                hospitalName = shit.name
+                                hospitalId = shit.center_id
+                                // console.log(hospitalId, hospitalName , shit.sessions[j].available_capacity)
+                                let doc = await User.findOne({email : username})
+                                if (doc.vaccinated == "No"){
+                                    doc.hospitalName = hospitalName
+                                    doc.hospitalId = hospitalId
+                                    doc.location = lat + ' ' + long
+                                    // console.log(date, doc.date)
+                                    doc.date = date
+                                    await doc.save()
+                                    console.log(date, doc.date)
+                                    await res.json({
+                                        "message" : "Found",
+                                        "date" : doc.date
+                                    })
+                                    return next();
+                                }
                             }
-                            else{
-                                // console.log("Vaccinated!")
-                            }
-                            return
-                        }
-                        else{
-                            // console.log("No vaccines")
                         }
                     }
                     catch(e){
-                        // console.log("Error")
                     }
                 })
             }
         })
         .catch((error) => {console.log(error)})
-        // let doc2 = await User.findOne({email : username})
-        if (oldDate == date){
-            res.json({
-                "message" : "Not Assigned"
-            })
-        }
-        else{
-            res.json({
-                "message" : "Assigned"
-            })
-        }
+}
+
+exports.getDate = async(req, res) => {
+    let doc = await User.findOne({email : req.body.email})
+    if(doc){
+        res.json({
+            "message" : "Found",
+            "date" : doc.date
+        })
+    }
+    else{
+        res.json({
+            "message" : "Not found"
+        })
+    }
 }
 
 exports.otp = async (req, res) => {
