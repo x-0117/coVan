@@ -35,31 +35,16 @@ const ChangeDate = (props) => {
         return false;
     }
     const postData = (e) => {
-        e.preventDefault();
         axios.post('/mainPage' , {
             values : datavalues,
             username : props.location.state.values.email
         })
         .then(res => {
-            const set_date = datavalues.date.split('-')[2] + '-' + datavalues.date.split('-')[1] + '-' + datavalues.date.split('-')[0]
-            if(res.data.message === 'Found' && res.data.date === set_date && res.data.date !== '0-0-0'){
-                props.history.push({
-                    pathname : '/track-vaccine',
-                    state : {
-                        values : props.location.state.values,
-                        date : res.data.date
-                    }
-                })
-            }else {
-                setdataValues({
-                    ...datavalues,
-                    errorMessage : "Cannot Assign A Slot On This Day ! Please Consider Some Other Date"
-                })
-            }
         })
         .catch(err => {
             console.log(err);
         })
+        axios.
     }
     const errorPos = () => {
         if(datavalues.lat=== '' || datavalues.long === '')
