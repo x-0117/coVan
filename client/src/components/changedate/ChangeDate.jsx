@@ -16,7 +16,7 @@ const ChangeDate = (props) => {
         event.preventDefault();
         setdataValues({ ...datavalues, [prop]: event.target.value });
     };
-    if(typeof props.location.state === 'undefined'){
+    if(typeof props.location.state === 'undefined' || props.history.action === 'POP'){
         return <Redirect to='/login'/>
     }
     const name = props.location.state.values.name;
@@ -41,16 +41,22 @@ const ChangeDate = (props) => {
             username : props.location.state.values.email
         })
         .then(res => {
-            if(res.data.message === 'Assigned'){
+            console.log(res)
+            const set_date = datavalues.date.split('-')[2] + '-' + datavalues.date.split('-')[1] + '-' + datavalues.date.split('-')[0]
+            console.log(res.data.date,set_date)
+            if(res.data.message === 'Found' && res.data.date === set_date && res.data.date !== '0-0-0'){
                 props.history.push({
                     pathname : '/track-vaccine',
                     state : {
                         values : props.location.state.values,
-                        date : datavalues.date
+                        date : res.data.date
                     }
                 })
-            } else {
-                setdataValues({ ...datavalues , errorMessage : res.data.message})
+            }else {
+                setdataValues({
+                    ...datavalues,
+                    errorMessage : "Cannot Assign A Slot On This Day ! Please Consider Some Other Date"
+                })
             }
         })
         .catch(err => {
