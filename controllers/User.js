@@ -121,6 +121,11 @@ exports.mainPage = async (req, res , next) => {
             }
         })
         .catch((error) => {console.log(error)})
+        await res.json({
+            "message" : "Found",
+            "date" : doc.date
+        })
+        return next();
 }
 
 exports.getDate = async(req, res) => {
