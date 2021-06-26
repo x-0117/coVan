@@ -38,7 +38,9 @@ They have a different portal on the site where they can check which user to vacc
 <h3 align='center'>After Vaccination</h3>
 
 ![This is a alt text.](Images/vaccinated.JPG "This is a sample image.")
+<h3 align='center'>Client's UI</h3>
 
+![This is a alt text.](Images/shit.png "This is a sample image.")
 ## Problems :
 Unavailability of proper API to see the vaccination status of individuals, hence we are depending on the user to provide correct details.
 
